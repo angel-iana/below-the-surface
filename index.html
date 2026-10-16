@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>Below the Surface</title>
+<style>
+/* Layout: one reading column. Purpose (three commitments) at the top; every later section points back to the commitment it serves. Legal detail lives in Terms at the foot of the page. */
+:root {
+  --bg: #f6f7f8;
+  --surface: #fdfdfd;
+  --ink: #111417;
+  --ink-2: #4a5058;
+  --muted: #7d838b;
+  --rule: #dde0e4;
+  --axis: #c2c7cd;
+  --accent: #1d4f9c;            /* road-sign blue */
+  --accent-wash: rgba(29,79,156,.08);
+  --p1: #1d4f9c; --p2: #0b7a6b; --p3: #9a5b00;   /* verifiable, quality-checked, useful */
+  --lvA: #0a6f0a; --lvB: #2f7d2f; --lvC: #8a5a00; --lvD: #a52626;
+  --font-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1013; --surface: #171a1e; --ink: #eef0f2; --ink-2: #b9bfc6; --muted: #8a9099;
+    --rule: #2a2f35; --axis: #3a4048; --accent: #6f9de6; --accent-wash: rgba(111,157,230,.12);
+    --p1: #6f9de6; --p2: #3fbfa9; --p3: #e0a03a;
+    --lvA: #3fcf3f; --lvB: #7ccf7c; --lvC: #e0a03a; --lvD: #ef7070; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1013; --surface: #171a1e; --ink: #eef0f2; --ink-2: #b9bfc6; --muted: #8a9099;
+  --rule: #2a2f35; --axis: #3a4048; --accent: #6f9de6; --accent-wash: rgba(111,157,230,.12);
+  --p1: #6f9de6; --p2: #3fbfa9; --p3: #e0a03a;
+  --lvA: #3fcf3f; --lvB: #7ccf7c; --lvC: #e0a03a; --lvD: #ef7070; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 40px; display: grid; gap: 64px; }
+.wrap > * { min-width: 0; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; line-height: 1.08; text-wrap: balance; }
+h1 { font-size: clamp(40px, 8vw, 72px); font-weight: 700; letter-spacing: -.005em; }
+h2 { font-size: clamp(26px, 4vw, 34px); }
+h3 { font-size: 20px; }
+p { margin: 0; }
+.eyebrow { font-family: var(--font-display); font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.lead { font-size: 19px; color: var(--ink-2); max-width: 62ch; }
+.muted { color: var(--muted); }
+section { display: grid; gap: 22px; scroll-margin-top: 16px; }
+.section-intro { display: grid; gap: 10px; max-width: 66ch; }
+.section-intro p { color: var(--ink-2); }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Hero */
+.hero { display: grid; gap: 18px; border-bottom: 1px solid var(--rule); padding-block: 8px 40px; }
+.hero nav { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: .03em; }
+.hero nav a { text-decoration: none; color: var(--ink-2); border-bottom: 2px solid transparent; padding-bottom: 2px; }
+.hero nav a:hover { color: var(--accent); border-color: var(--accent); }
+.status { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); }
+.status i { width: 8px; height: 8px; border-radius: 50%; background: var(--p3); }
+
+/* Purpose: three commitments */
+.commit { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.cm { background: var(--surface); border: 1px solid var(--rule); border-top: 4px solid var(--c); border-radius: 6px; padding: 20px; display: grid; gap: 8px; align-content: start; scroll-margin-top: 16px; }
+.cm.flash { box-shadow: 0 0 0 3px var(--c); }
+.cm .k { font-family: var(--font-display); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--c); font-weight: 700; }
+.cm p { color: var(--ink-2); font-size: 15px; }
+.cm .more { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--c); }
+.p1 { --c: var(--p1); } .p2 { --c: var(--p2); } .p3 { --c: var(--p3); }
+
+/* Back-links to purpose */
+.serves { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; color: var(--muted); }
+.tag { display: inline-flex; align-items: center; gap: 6px; font: 600 13px var(--font-body); color: var(--c); border: 1px solid var(--c); border-radius: 999px; padding: 3px 11px; text-decoration: none; background: var(--surface); }
+.tag::before { content: "↑"; font-size: 12px; }
+.tag:hover { background: var(--accent-wash); }
+
+/* Who it serves */
+.uses { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 14px; }
+.use { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 20px; display: grid; gap: 10px; align-content: start; }
+.use .who { font-family: var(--font-display); font-size: 22px; font-weight: 600; line-height: 1.1; }
+.use ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--ink-2); font-size: 15px; }
+
+/* Structure: process explorer */
+.flow { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.stage { position: relative; border: 1px solid var(--axis); background: var(--surface); border-radius: 6px; padding: 12px 10px; text-align: left; cursor: pointer; font: inherit; color: var(--ink); display: grid; gap: 4px; align-content: start; min-height: 92px; }
+.stage .n { font-family: var(--font-display); font-size: 13px; color: var(--muted); letter-spacing: .1em; }
+.stage .t { font-family: var(--font-display); font-size: 19px; font-weight: 600; line-height: 1.05; }
+.stage[aria-selected="true"] { border-color: var(--accent); background: var(--accent-wash); box-shadow: inset 0 -3px 0 var(--accent); }
+.stage:not(:last-child)::after { content: ""; position: absolute; right: -6px; top: 50%; width: 6px; height: 2px; background: var(--axis); }
+.detail { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 22px; display: grid; gap: 12px; }
+.detail dl { margin: 0; display: grid; gap: 10px; }
+.detail .row { display: grid; grid-template-columns: 150px 1fr; gap: 6px 18px; }
+.detail .row dt { font-family: var(--font-display); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding-top: 2px; }
+.detail .row dd { margin: 0; color: var(--ink-2); }
+
+/* Sectors */
+.sectors { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 10px; }
+.sector { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; background: var(--surface); display: grid; gap: 8px; align-content: start; }
+.sector h4 { margin: 0; font-family: var(--font-display); font-size: 19px; font-weight: 600; line-height: 1.1; }
+.subs { display: flex; flex-wrap: wrap; gap: 5px; }
+.sub { font-size: 13px; color: var(--ink-2); border: 1px dashed var(--axis); border-radius: 4px; padding: 2px 8px; }
+.subs-none { font-size: 13px; color: var(--muted); }
+
+/* Principles */
+.principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 0 28px; border-top: 1px solid var(--rule); }
+.pr { display: grid; grid-template-columns: 56px 1fr; gap: 4px 14px; padding: 20px 4px; border-bottom: 1px solid var(--rule); align-content: start; }
+.pr .num { font-family: var(--font-display); font-weight: 700; font-size: 44px; line-height: .9; color: var(--accent); grid-row: span 2; }
+.pr h3 { font-size: 24px; }
+.pr p { color: var(--ink-2); font-size: 15px; }
+.to-terms { font-weight: 600; text-decoration: none; }
+.to-terms:hover { text-decoration: underline; }
+
+/* Quality */
+.qgrid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 18px; }
+.ladder { display: grid; gap: 6px; align-content: start; }
+.lv { display: grid; grid-template-columns: 46px 1fr auto; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; cursor: pointer; text-align: left; font: inherit; color: var(--ink); }
+.lv .L { font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--lc); line-height: 1; text-align: center; }
+.lv .d b { display: block; font-weight: 600; }
+.lv .d span { font-size: 14px; color: var(--ink-2); }
+.lv .pub { font-size: 13px; font-weight: 600; color: var(--lc); white-space: nowrap; }
+.lv[aria-expanded="true"] { border-color: var(--lc); box-shadow: inset 4px 0 0 var(--lc); }
+.lv-more { font-size: 14px; color: var(--ink-2); padding: 2px 14px 8px 72px; }
+.A { --lc: var(--lvA); } .B { --lc: var(--lvB); } .C { --lc: var(--lvC); } .D { --lc: var(--lvD); }
+.cycle { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 20px; display: grid; gap: 14px; align-content: start; }
+.cycle ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; counter-reset: c; }
+.cycle li { counter-increment: c; display: grid; grid-template-columns: 30px 1fr; gap: 10px; }
+.cycle li::before { content: counter(c); font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--accent); width: 28px; height: 28px; border: 2px solid var(--accent); border-radius: 50%; display: grid; place-items: center; line-height: 1; }
+.cycle li b { display: block; }
+.cycle li span { font-size: 14px; color: var(--ink-2); }
+.dims { display: flex; flex-wrap: wrap; gap: 6px; }
+.dim { font-size: 14px; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; color: var(--ink-2); background: var(--surface); }
+
+/* Terms */
+.terms { border-top: 2px solid var(--ink); padding-top: 28px; gap: 18px; }
+.terms .section-intro p { font-size: 15px; }
+.tlist { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+details { border-bottom: 1px solid var(--rule); }
+summary { cursor: pointer; list-style: none; padding: 14px 4px; display: flex; justify-content: space-between; gap: 12px; align-items: baseline; font-family: var(--font-display); font-size: 20px; font-weight: 600; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--accent); font-size: 22px; line-height: 1; }
+details[open] summary::after { content: "–"; }
+.tbody { padding: 0 4px 18px; display: grid; gap: 10px; color: var(--ink-2); font-size: 15px; max-width: 72ch; }
+.rules { width: 100%; border-collapse: collapse; font-size: 14px; }
+.rules-wrap { overflow-x: auto; }
+.rules th, .rules td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.rules th { font-family: var(--font-display); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.rules td:first-child { font-family: var(--font-display); font-weight: 700; color: var(--accent); font-size: 16px; white-space: nowrap; }
+.rules td:last-child { color: var(--muted); }
+
+footer { border-top: 1px solid var(--rule); padding-top: 18px; color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 6px 22px; justify-content: space-between; }
+footer nav { display: flex; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 760px) {
+  .flow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stage:nth-child(3)::after { display: none; }
+  .qgrid { grid-template-columns: 1fr; }
+  .detail .row { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stage:nth-child(3)::after { display: block; }
+  .stage:nth-child(even)::after { display: none; }
+  .lv-more { padding-left: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Romanian infrastructure in public data</span>
+    <h1>Below the Surface</h1>
+    <p class="lead">An open, verifiable record of how Romania's roads, bridges, railways, energy networks and industrial plants are inspected and maintained, built only from public sources.</p>
+    <span class="status"><i aria-hidden="true"></i>In development. Data is being collected and checked; no figures are published yet.</span>
+    <nav aria-label="Sections">
+      <a href="#purpose">Purpose</a><a href="#serves">Who it serves</a><a href="#structure">How it works</a><a href="#rules">Our rules</a><a href="#quality">Quality</a><a href="#terms">Terms</a>
+    </nav>
+  </header>
+
+  <section id="purpose" aria-labelledby="h-purpose">
+    <div class="section-intro">
+      <span class="eyebrow">Purpose</span>
+      <h2 id="h-purpose">Three commitments</h2>
+      <p>Information about the condition of infrastructure exists, but it is scattered across audit reports, registers, permits and statistics. This project brings it together in one place and holds every entry to three commitments.</p>
+    </div>
+    <div class="commit">
+      <article class="cm p1" id="p-true"><span class="k">Verifiable</span><h3>Every fact leads back to its source</h3><p>Each value carries its document, page and exact sentence, so anyone can check it. Facts are kept apart from interpretation.</p></article>
+      <article class="cm p2" id="p-quality"><span class="k">Quality-checked</span><h3>Checked before it is shown</h3><p>Every fact has a stated confidence level. Unverified or conflicting facts are never published, limits are stated, and corrections are kept on record.</p><a class="more" href="#quality">How quality is checked →</a></article>
+      <article class="cm p3" id="p-useful"><span class="k">Useful</span><h3>Built to support decisions</h3><p>For the people who own, inspect and maintain these assets, and for the public who relies on them every day.</p></article>
+    </div>
+  </section>
+
+  <section id="serves" aria-labelledby="h-serves">
+    <div class="section-intro">
+      <span class="eyebrow">Who it serves</span>
+      <h2 id="h-serves">What the record is for</h2>
+      <p>Each use below follows directly from the commitments above.</p>
+    </div>
+    <div class="uses">
+      <article class="use">
+        <span class="who">Asset owners and public institutions</span>
+        <ul><li>See how audit findings and corrective measures are followed through over time.</li><li>Compare inspection and maintenance practice across operators and regions.</li></ul>
+        <div class="serves"><a class="tag p3" href="#p-useful">Useful</a><a class="tag p1" href="#p-true">Verifiable</a></div>
+      </article>
+      <article class="use">
+        <span class="who">Inspection and testing companies</span>
+        <ul><li>Understand which assets need periodic inspection, and under which rules.</li><li>Map authorised laboratories and inspection bodies by register.</li></ul>
+        <div class="serves"><a class="tag p3" href="#p-useful">Useful</a><a class="tag p2" href="#p-quality">Quality-checked</a></div>
+      </article>
+      <article class="use">
+        <span class="who">Journalists, researchers and citizens</span>
+        <ul><li>Start from facts that link back to the official document.</li><li>Report errors and see what was corrected, through a public corrections register (planned).</li></ul>
+        <div class="serves"><a class="tag p1" href="#p-true">Verifiable</a><a class="tag p2" href="#p-quality">Quality-checked</a></div>
+      </article>
+      <article class="use">
+        <span class="who">Public safety</span>
+        <ul><li>Make visible where inspection, maintenance and follow-up are lagging, without pointing to the exact location of sensitive assets.</li></ul>
+        <div class="serves"><a class="tag p3" href="#p-useful">Useful</a><a class="tag p2" href="#p-quality">Quality-checked</a></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="structure" aria-labelledby="h-structure">
+    <div class="section-intro">
+      <span class="eyebrow">How it works</span>
+      <h2 id="h-structure">From public document to checked record</h2>
+      <p>Every piece of information passes through the same six stages. Select a stage to see what happens there.</p>
+    </div>
+    <div class="flow" role="tablist" aria-label="Process stages" id="flow"></div>
+    <div class="detail" role="tabpanel" id="detail" aria-live="polite"></div>
+    <div class="section-intro"><h3>Sectors covered</h3><p>Five sectors. Equipment and facilities that serve more than one sector are tracked inside each sector where they apply.</p></div>
+    <div class="sectors">
+      <div class="sector"><h4>Roads and bridges</h4><span class="subs-none">Bridges, tunnels, motorways</span></div>
+      <div class="sector"><h4>Railways</h4><span class="subs-none">Track, bridges, tunnels</span></div>
+      <div class="sector"><h4>Power and energy</h4><div class="subs"><span class="sub">District heating</span><span class="sub">Pressure equipment</span></div></div>
+      <div class="sector"><h4>Oil and gas</h4><div class="subs"><span class="sub">Storage</span><span class="sub">Pressure equipment</span><span class="sub">Lifting equipment</span></div></div>
+      <div class="sector"><h4>Petrochemical</h4><div class="subs"><span class="sub">Storage</span><span class="sub">Pressure equipment</span><span class="sub">Lifting equipment</span></div></div>
+    </div>
+    <p class="muted">All sectors are collected in parallel. One pilot sector will be completed first and published as the first finished product.</p>
+  </section>
+
+  <section id="rules" aria-labelledby="h-rules">
+    <div class="section-intro">
+      <span class="eyebrow">Our rules</span>
+      <h2 id="h-rules">Three principles behind every entry</h2>
+    </div>
+    <div class="principles">
+      <div class="pr"><span class="num">1</span><h3>Truth</h3><p>Only what a source actually says. No invented or estimated figures unless clearly marked as estimates.</p></div>
+      <div class="pr"><span class="num">2</span><h3>Transparency</h3><p>Sources, methods, confidence levels and limits are shown openly, and so are corrections.</p></div>
+      <div class="pr"><span class="num">3</span><h3>Open data</h3><p>Built from official open data and public documents, used within their licences and the law.</p></div>
+    </div>
+    <p><a class="to-terms" href="#terms">Read the rules in full in the Terms →</a></p>
+  </section>
+
+  <section id="quality" aria-labelledby="h-quality">
+    <div class="section-intro">
+      <span class="eyebrow">Quality</span>
+      <h2 id="h-quality">How much each fact can be trusted</h2>
+      <p>Each fact carries a confidence level, and only checked facts reach a public report. Select a level for an example.</p>
+    </div>
+    <div class="qgrid">
+      <div class="ladder" id="ladder"></div>
+      <div class="cycle">
+        <h3>The quality cycle</h3>
+        <ol>
+          <li><div><b>Automatic checks on every batch</b><span>Anything that fails is set aside with the reason. Nothing is deleted.</span></div></li>
+          <li><div><b>Human verification</b><span>The first batch of any new document type is checked in full; after that, a 10% sample.</span></div></li>
+          <li><div><b>Monthly source review</b><span>Links, content changes, licences and access rules are re-checked every month.</span></div></li>
+          <li><div><b>Corrections are recorded</b><span>Revised values sit next to the originals, with the date and reason.</span></div></li>
+        </ol>
+        <div class="dims" aria-label="Quality dimensions">
+          <span class="dim">validity</span><span class="dim">completeness</span><span class="dim">uniqueness</span><span class="dim">consistency</span><span class="dim">timeliness</span><span class="dim">accuracy</span><span class="dim">credibility</span><span class="dim">traceability</span>
+        </div>
+        <p class="muted" style="font-size:14px">Dimensions follow DAMA UK and ISO/IEC 25012.</p>
+      </div>
+    </div>
+    <div class="serves">Quality serves <a class="tag p2" href="#p-quality">Quality-checked</a><a class="tag p1" href="#p-true">Verifiable</a></div>
+  </section>
+
+  <section id="terms" class="terms" aria-labelledby="h-terms">
+    <div class="section-intro">
+      <span class="eyebrow">Terms</span>
+      <h2 id="h-terms">Terms and conditions</h2>
+      <p>How this project respects the law and the rights of others, and how you may use what is published here.</p>
+    </div>
+    <div class="tlist">
+      <details>
+        <summary>How we respect the law</summary>
+        <div class="tbody">
+          <p>These eight rules apply to every source, every extraction and every publication. Work that would break one of them stops.</p>
+          <div class="rules-wrap"><table class="rules">
+            <thead><tr><th scope="col">Rule</th><th scope="col">What it means</th><th scope="col">Legal basis</th></tr></thead>
+            <tbody>
+              <tr><td>R1</td><td>Official open data comes first.</td><td>Law 179/2022 on open data</td></tr>
+              <tr><td>R2</td><td>Every source's licence is respected and recorded.</td><td>Source licences, e.g. Open Government Licence Romania 1.0</td></tr>
+              <tr><td>R3</td><td>No substantial part of a protected database is copied.</td><td>Directive 96/9/EC; Law 8/1996</td></tr>
+              <tr><td>R4</td><td>Automated collection only where the site allows it; robots.txt, terms and text-and-data-mining reservations are checked first. Where it is not allowed, collection is manual.</td><td>Directive (EU) 2019/790, art. 4</td></tr>
+              <tr><td>R5</td><td>No personal data. Roles and institutions are recorded, never names.</td><td>GDPR (Regulation (EU) 2016/679)</td></tr>
+              <tr><td>R6</td><td>No sensitive information about critical infrastructure, and no precise locations of critical or non-public assets.</td><td>GEO 98/2010</td></tr>
+              <tr><td>R7</td><td>Unpublished information is requested formally from the public body that holds it.</td><td>Law 544/2001</td></tr>
+              <tr><td>R8</td><td>Every report and dashboard names its sources.</td><td>Source licences</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </details>
+      <details>
+        <summary>Sources and attribution</summary>
+        <div class="tbody"><p>Facts come from public documents and official open data published by Romanian and European public bodies. Each published fact names its source, document, page and date. The underlying facts belong to no one; the selection, verification and presentation are this project's work.</p></div>
+      </details>
+      <details>
+        <summary>Accuracy and limits</summary>
+        <div class="tbody"><p>Information is provided as published by the original sources and checked to the confidence level shown next to it. It is not an engineering assessment of any asset and must not be used as one. Where sources are incomplete or disagree, this is stated.</p></div>
+      </details>
+      <details>
+        <summary>Corrections</summary>
+        <div class="tbody"><p>If you find an error, it will be checked against the source. Corrected values are kept next to the original, with the date and the reason, so the history of every fact stays visible. A public corrections register is planned.</p></div>
+      </details>
+      <details>
+        <summary>Privacy</summary>
+        <div class="tbody"><p>The project records no personal data about individuals named in public documents. This site has no accounts, forms, cookies or analytics of its own.</p></div>
+      </details>
+      <details>
+        <summary>Licence for this site</summary>
+        <div class="tbody"><p>Text, design and analysis on this site are licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 (CC BY-NC-ND 4.0). You may share them with attribution, without changes and not for commercial use. Source documents remain under their own terms.</p></div>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <span>Below the Surface · Romanian infrastructure in public data · © 2026</span>
+    <nav aria-label="Footer"><a href="#terms">Terms</a><a href="#rules">Our rules</a><a href="#quality">Quality</a></nav>
+  </footer>
+</div>
+
+<script>
+const STAGES = [
+  { t: "Sources", what: "Every source is registered before use: who publishes it, under which licence, and whether automated access is allowed.", rule: "Open data · licence recorded", out: "A source register" },
+  { t: "Intake", what: "Each document is archived unchanged, with a digital fingerprint (SHA-256) that proves later that it was not altered.", rule: "Transparency", out: "An archived original" },
+  { t: "Extraction", what: "Tables are read with fixed rules. Documents with a fixed layout are read with text rules. Irregular documents are read by a local model, and its output is treated as unverified.", rule: "Truth · no names kept", out: "Values with page and quote" },
+  { t: "Quality gate", what: "Each value is checked: does the quoted sentence exist on that page, is the value in the allowed list, is it a duplicate? Failures are set aside with the reason.", rule: "Quality cycle", out: "Accepted or set aside" },
+  { t: "Database", what: "Raw inputs, checked tables and reference knowledge are kept apart. History is kept: a revised value never overwrites the original.", rule: "Corrections on record", out: "A versioned record" },
+  { t: "Publication", what: "Only checked facts, aggregated where needed, without precise locations of sensitive assets, and always with the source named.", rule: "Terms: R6 · R8", out: "Reports and dashboards" }
+];
+const LEVELS = [
+  { k: "A", name: "Confirmed", d: "Official source, confirmed by a second source.", pub: "Published", ex: "A bridge count from the operator that matches the national statistics." },
+  { k: "B", name: "Official, single source", d: "One official source, checked by a person.", pub: "Published", ex: "An auditor's finding, checked against the page and sentence of the audit report." },
+  { k: "C", name: "Secondary or automated", d: "A secondary source, or an automated extraction not yet checked.", pub: "Marked as such", ex: "A figure quoted in a news article, or a value read by a model and waiting for review." },
+  { k: "D", name: "Unverified or in conflict", d: "Not checked, or sources disagree.", pub: "Never published", ex: "Two official documents give different numbers for the same asset." }
+];
+function el(tag, attrs, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else n.setAttribute(k, v); }
+  for (const c of kids) if (c != null) n.append(c);
+  return n;
+}
+const flow = document.getElementById("flow"), detail = document.getElementById("detail");
+let cur = 0;
+function showStage(i, focus) {
+  cur = i;
+  [...flow.children].forEach((b, j) => { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
+  if (focus) flow.children[i].focus();
+  const s = STAGES[i];
+  detail.replaceChildren(
+    el("h3", { text: `${i + 1}. ${s.t}` }),
+    el("dl", {},
+      el("div", { class: "row" }, el("dt", { text: "What happens" }), el("dd", { text: s.what })),
+      el("div", { class: "row" }, el("dt", { text: "Principle" }), el("dd", { text: s.rule })),
+      el("div", { class: "row" }, el("dt", { text: "Result" }), el("dd", { text: s.out }))
+    )
+  );
+}
+STAGES.forEach((s, i) => {
+  const b = el("button", { class: "stage", role: "tab", type: "button", "aria-controls": "detail", id: "st" + i },
+    el("span", { class: "n", text: String(i + 1).padStart(2, "0") }), el("span", { class: "t", text: s.t }));
+  b.addEventListener("click", () => showStage(i));
+  b.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") { e.preventDefault(); showStage((cur + 1) % STAGES.length, true); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); showStage((cur - 1 + STAGES.length) % STAGES.length, true); }
+  });
+  flow.append(b);
+});
+showStage(0);
+
+const ladder = document.getElementById("ladder");
+LEVELS.forEach((l, i) => {
+  const more = el("p", { class: "lv-more", id: "lvm" + i, text: "Example: " + l.ex });
+  more.hidden = true;
+  const b = el("button", { class: "lv " + l.k, type: "button", "aria-expanded": "false", "aria-controls": "lvm" + i },
+    el("span", { class: "L", text: l.k }),
+    el("span", { class: "d" }, el("b", { text: l.name }), el("span", { text: l.d })),
+    el("span", { class: "pub", text: l.pub }));
+  b.addEventListener("click", () => { const open = b.getAttribute("aria-expanded") === "true"; b.setAttribute("aria-expanded", String(!open)); more.hidden = open; });
+  ladder.append(b, more);
+});
+
+/* Highlight the commitment a tag points to; open the first Terms item when Terms is reached from a link */
+document.querySelectorAll('a.tag[href^="#p-"]').forEach(a => a.addEventListener("click", () => {
+  const t = document.querySelector(a.getAttribute("href"));
+  if (!t) return;
+  t.classList.add("flash"); setTimeout(() => t.classList.remove("flash"), 1400);
+}));
+document.querySelectorAll('a[href="#terms"]').forEach(a => a.addEventListener("click", () => {
+  const d = document.querySelector("#terms details"); if (d) d.open = true;
+}));
+</script>
+
+</body>
+</html>

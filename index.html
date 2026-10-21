@@ -106,6 +106,26 @@ a { color: var(--accent); }
 .sub { font-size: 13px; color: var(--ink-2); border: 1px dashed var(--axis); border-radius: 4px; padding: 2px 8px; }
 .subs-none { font-size: 13px; color: var(--muted); }
 
+/* Progress: where the work stands */
+.pg-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.asof { font-size: 14px; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font: 600 13px var(--font-body); color: var(--s); background: color-mix(in srgb, var(--s) 10%, transparent); border-radius: 999px; padding: 3px 10px; white-space: nowrap; justify-self: start; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.s-use { --s: var(--p2); } .s-wip { --s: var(--p3); } .s-wait { --s: var(--accent); } .s-plan { --s: var(--muted); }
+.pipe { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.pstep { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 10px 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.pstep .n { font-family: var(--font-display); font-size: 13px; color: var(--muted); letter-spacing: .1em; }
+.pstep .t { font-family: var(--font-display); font-size: 19px; font-weight: 600; line-height: 1.05; }
+.pstep p { font-size: 14px; color: var(--ink-2); }
+.track { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.trow { display: grid; grid-template-columns: minmax(150px, 210px) minmax(150px, auto) 1fr; gap: 6px 18px; padding: 14px 4px; border-bottom: 1px solid var(--rule); align-items: start; }
+.trow h4 { margin: 0; font-family: var(--font-display); font-size: 19px; font-weight: 600; line-height: 1.1; }
+.trow p { color: var(--ink-2); font-size: 15px; }
+.pg-one { display: grid; max-width: 66ch; }
+.box { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 20px; display: grid; gap: 12px; align-content: start; }
+.box ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: var(--ink-2); font-size: 15px; }
+
 /* Principles */
 .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 0 28px; border-top: 1px solid var(--rule); }
 .pr { display: grid; grid-template-columns: 56px 1fr; gap: 4px 14px; padding: 20px 4px; border-bottom: 1px solid var(--rule); align-content: start; }
@@ -156,6 +176,8 @@ footer { border-top: 1px solid var(--rule); padding-top: 18px; color: var(--mute
 footer nav { display: flex; gap: 16px; flex-wrap: wrap; }
 
 @media (max-width: 760px) {
+  .pipe { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trow { grid-template-columns: 1fr; }
   .flow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .stage:nth-child(3)::after { display: none; }
   .qgrid { grid-template-columns: 1fr; }
@@ -177,7 +199,7 @@ footer nav { display: flex; gap: 16px; flex-wrap: wrap; }
     <p class="lead">An open, verifiable record of how Romania's roads, bridges, railways, energy networks and industrial plants are inspected and maintained, built only from public sources.</p>
     <span class="status"><i aria-hidden="true"></i>In development. Data is being collected and checked; no figures are published yet.</span>
     <nav aria-label="Sections">
-      <a href="#purpose">Purpose</a><a href="#serves">Who it serves</a><a href="#structure">How it works</a><a href="#rules">Our rules</a><a href="#quality">Quality</a><a href="#terms">Terms</a>
+      <a href="#purpose">Purpose</a><a href="#serves">Who it serves</a><a href="#structure">How it works</a><a href="#progress">Progress</a><a href="#rules">Our rules</a><a href="#quality">Quality</a><a href="#terms">Terms</a>
     </nav>
   </header>
 
@@ -241,6 +263,49 @@ footer nav { display: flex; gap: 16px; flex-wrap: wrap; }
       <div class="sector"><h4>Petrochemical</h4><div class="subs"><span class="sub">Storage</span><span class="sub">Pressure equipment</span><span class="sub">Lifting equipment</span></div></div>
     </div>
     <p class="muted">All sectors are collected in parallel. One pilot sector will be completed first and published as the first finished product.</p>
+  </section>
+
+  <section id="progress" aria-labelledby="h-progress">
+    <div class="section-intro">
+      <span class="eyebrow">Progress</span>
+      <div class="pg-head"><h2 id="h-progress">Where the work stands</h2><span class="asof">Updated 21 October 2026</span></div>
+      <p>The record is built in the order shown above. This is the state of each step and each sector today. No figures are published until a sector passes every step.</p>
+    </div>
+    <div class="legend" aria-label="Status key"><span class="pill s-use">In use</span><span class="pill s-wip">In progress</span><span class="pill s-wait">Awaiting reply</span><span class="pill s-plan">Planned</span></div>
+
+    <div class="pipe" aria-label="Process steps and their status">
+      <div class="pstep"><span class="n">01</span><span class="t">Sources</span><span class="pill s-use">In use</span><p>Every source is registered with its licence, access rules and personal-data check before use.</p></div>
+      <div class="pstep"><span class="n">02</span><span class="t">Intake</span><span class="pill s-use">In use</span><p>Documents are archived unchanged, each with a SHA-256 fingerprint.</p></div>
+      <div class="pstep"><span class="n">03</span><span class="t">Extraction</span><span class="pill s-use">In use</span><p>Fixed rules for tables. A model running on a local computer for irregular reports.</p></div>
+      <div class="pstep"><span class="n">04</span><span class="t">Quality gate</span><span class="pill s-use">In use</span><p>Quote and page checked automatically. A value that fails is set aside with its reason, never deleted.</p></div>
+      <div class="pstep"><span class="n">05</span><span class="t">Database</span><span class="pill s-wip">In progress</span><p>Raw, checked and reference layers are in place. Versioned models come next.</p></div>
+      <div class="pstep"><span class="n">06</span><span class="t">Publication</span><span class="pill s-plan">Planned</span><p>Aggregated dashboards and a county-level map, with sources named.</p></div>
+    </div>
+
+    <div class="section-intro"><h3>By sector</h3></div>
+    <div class="track">
+      <div class="trow"><h4>Roads and bridges</h4><span class="pill s-wait">Awaiting reply</span><p>National roads and motorways, with their bridges and tunnels. We will show how many bridges there are, their age and condition class, and how many carry traffic restrictions, by county. Example: the number of bridges in the two worst condition classes in each county.</p></div>
+      <div class="trow"><h4>Railways</h4><span class="pill s-wip">In progress</span><p>The national rail network: track, bridges, culverts and tunnels. We will show bridges by material and age, bridges that need major repair, and speed restrictions caused by their condition, by regional branch and year. Example: how speed restrictions caused by bridges changed from 2020 to 2025.</p></div>
+      <div class="trow"><h4>Power and energy</h4><span class="pill s-wip">In progress</span><p>Power plants, district heating and the pressure equipment inside them: boilers, steam pipes, turbines. We will show which equipment each type of plant contains, how it degrades and which inspection methods apply. Example: in a coal-fired unit, the boiler tubes, the creep damage they suffer and the tests used to find it.</p></div>
+      <div class="trow"><h4>Oil and gas</h4><span class="pill s-wip">In progress</span><p>Wells, pipelines, compressor stations and storage. We will show the size of the network and the maintenance planned for it, from the operators' published plans, by county. Example: kilometres of transmission pipeline and the inspections planned on them each year.</p></div>
+      <div class="trow"><h4>Petrochemical</h4><span class="pill s-plan">Planned</span><p>Refineries and chemical plants, including major-hazard (SEVESO) sites. We will show their process units, the equipment in them and the typical damage mechanisms. Example: corrosion under insulation in a distillation unit and the methods that detect it.</p></div>
+      <div class="trow"><h4>Inspection market</h4><span class="pill s-wip">In progress</span><p>The companies and laboratories authorised to inspect this equipment. We will show how many there are, which methods they hold, where they are and how large the market is, always as totals, medians and ranges, never per company. Example: the number of laboratories authorised for phased-array ultrasonic testing, by region.</p></div>
+    </div>
+
+    <div class="pg-one">
+      <div class="box">
+        <h3>Next</h3>
+        <ul>
+          <li>Process the remaining replies through the same quality gate.</li>
+          <li>Choose the pilot sector and publish its first aggregated dashboard.</li>
+          <li>A county-level map. Sensitive assets are never shown at a finer level.</li>
+          <li>Open a public corrections register.</li>
+        </ul>
+        <h3>Who does the work</h3>
+        <p class="muted" style="font-size:15px">The project is built and checked by its author, an NDT inspector. Code, extraction scripts and drafts are written with an AI assistant (Claude). Every source approval, rule, correction and published value is decided and checked by the author. Unpublished documents and results are processed on the author's computer, not sent to cloud services.</p>
+      </div>
+    </div>
+    <div class="serves">Progress serves <a class="tag p1" href="#p-true">Verifiable</a><a class="tag p2" href="#p-quality">Quality-checked</a></div>
   </section>
 
   <section id="rules" aria-labelledby="h-rules">

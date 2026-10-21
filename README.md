@@ -7,7 +7,7 @@ An open, verifiable record of how Romania's roads, bridges, railways, energy net
 **Live page:** https://angel-iana.github.io/below-the-surface/
 
 ## Status
-In development. Data is being collected and checked; no figures are published yet.
+In development. Data is being collected and checked; no figures are published yet. The current state of each step and sector is in the *Progress* section of the live page.
 
 ## Commitments
 - **Verifiable**: every fact leads back to its document, page and exact sentence.

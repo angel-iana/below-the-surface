@@ -1,0 +1,71 @@
+{
+  "generated": "2026-11-16",
+  "source": "ANAF (company status) + ISCIR (authorisations) + RENAR (accreditation body) + CNCAN (nuclear/radiation authority)",
+  "confidence": "Level B for the active/inactive status (ANAF+ISCIR rule); Level C for the RENAR/CNCAN signals (matched by name, not tax ID - awaiting review)",
+  "q5_threshold": 4,
+  "status": {
+    "active": 196,
+    "inactive_iscir": 28,
+    "inactive_anaf": 27
+  },
+  "categories": [
+    {
+      "category": "Inspection provider",
+      "entities": 54,
+      "with_third_party_accreditation": 11
+    },
+    {
+      "category": "In-house laboratory",
+      "entities": 49,
+      "with_third_party_accreditation": 2
+    },
+    {
+      "category": "Installation & maintenance",
+      "entities": 32,
+      "with_third_party_accreditation": 2
+    },
+    {
+      "category": "No financial data",
+      "entities": 14,
+      "with_third_party_accreditation": 0
+    },
+    {
+      "category": "Research & training",
+      "entities": 7,
+      "with_third_party_accreditation": 2
+    }
+  ],
+  "inspection_provider": {
+    "note": "The only category relevant to the size of the NDT market as a service market. Aggregate turnover for the other categories is not published here: for 'in-house laboratory', it is the turnover of the whole parent company (often a large industrial operator), not of the NDT activity itself.",
+    "entities_with_financial_data": 54,
+    "median_turnover_lei": 1785883.0
+  },
+  "counties": [
+    {
+      "county": "Bucharest",
+      "entities": 15
+    },
+    {
+      "county": "Prahova",
+      "entities": 7
+    },
+    {
+      "county": "Constanța",
+      "entities": 5
+    },
+    {
+      "county": "Cluj",
+      "entities": 5
+    },
+    {
+      "county": "Argeș",
+      "entities": 4
+    }
+  ],
+  "counties_suppressed_below_q5": 18,
+  "limitations": [
+    "The RENAR and CNCAN links are made by normalised company name, not tax ID (CUI) - Level C, awaiting review.",
+    "No individual company name is published in this dataset.",
+    "Categories or counties with fewer than 4 distinct entities are suppressed, not shown as zero."
+  ]
+}

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Inspection market — Below the Surface</title>
+<style>
+:root {
+  --bg: #f6f7f8; --surface: #fdfdfd; --ink: #111417; --ink-2: #4a5058; --muted: #7d838b;
+  --rule: #dde0e4; --axis: #c2c7cd; --accent: #1d4f9c; --accent-wash: rgba(29,79,156,.08);
+  --p1: #1d4f9c; --p2: #0b7a6b; --p3: #9a5b00;
+  --bar: #c7cdd6; --bar-strong: #9a5b00;
+  --font-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1013; --surface: #171a1e; --ink: #eef0f2; --ink-2: #b9bfc6; --muted: #8a9099;
+    --rule: #2a2f35; --axis: #3a4048; --accent: #6f9de6; --accent-wash: rgba(111,157,230,.12);
+    --p1: #6f9de6; --p2: #3fbfa9; --p3: #e0a03a; --bar: #2a2f35; --bar-strong: #e0a03a;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin:0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 60px; display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; line-height: 1.08; text-wrap: balance; }
+h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 700; letter-spacing: -.005em; }
+h2 { font-size: clamp(22px, 3.4vw, 28px); margin-bottom: 14px; }
+p { margin: 0; }
+a { color: var(--accent); }
+.eyebrow { font-family: var(--font-display); font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.lead { font-size: 18px; color: var(--ink-2); max-width: 62ch; margin-top: 8px; }
+.muted { color: var(--muted); }
+.back { font-family: var(--font-display); font-weight: 600; font-size: 15px; text-decoration: none; color: var(--ink-2); }
+.back:hover { color: var(--accent); }
+.badge { display:inline-block; font-size: 13px; color: var(--muted); border:1px solid var(--rule); border-radius: 999px; padding: 2px 11px; margin-left: 8px; vertical-align: middle; }
+.kpis { display:flex; gap: 14px; flex-wrap: wrap; }
+.kpi { flex: 1; min-width: 150px; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; }
+.kpi .n { font-family: var(--font-display); font-size: 34px; font-weight: 700; color: var(--accent); }
+.kpi .l { font-size: 14px; color: var(--muted); margin-top: 2px; }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 22px 24px; display: grid; gap: 14px; }
+.panel .note { font-size: 14px; color: var(--muted); }
+.bar-label, .bar-value { font-family: var(--font-body); }
+.bar-label { fill: var(--ink); font-size: 13px; }
+.bar-value { fill: var(--muted); font-size: 12px; }
+footer { border-top: 1px solid var(--rule); padding-top: 20px; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div>
+    <a class="back" href="index.html">← Below the Surface</a>
+    <h1 style="margin-top:14px">Inspection market<span class="badge" id="updated"></span></h1>
+    <p class="lead">Active companies holding an ISCIR authorisation for non-destructive testing, cross-checked against two independent signals: accreditation by RENAR and authorisation by CNCAN (the nuclear and radiation authority).</p>
+  </div>
+
+  <section>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Companies by activity category</h2>
+    <div id="chart-categories"></div>
+    <p class="note">Open bar = active companies in the category. Filled bar (orange) = companies with at least one RENAR or CNCAN signal found. "Inspection provider" is the only category relevant to the size of the NDT market as a service market — the others are in-house laboratories at large industrial operators, installation/maintenance companies, or research and training bodies.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Turnover — inspection providers</h2>
+    <div id="chart-turnover" style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;"></div>
+    <p class="note" id="turnover-note"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Geographic distribution — inspection providers</h2>
+    <div id="chart-counties"></div>
+    <p class="note" id="counties-note"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Confidence and limitations</h2>
+    <p id="confidence-note"></p>
+    <ul id="limitations-list" style="margin:0; padding-left:1.2em; color:var(--ink-2)"></ul>
+  </section>
+
+  <footer>
+    Source: ANAF (company status) + ISCIR (authorisations) + RENAR + CNCAN. Data generated <span id="gen-date"></span>.
+    No company name is published on this page — see <a href="index.html#quality">how much each fact can be trusted</a> and <a href="index.html#terms">Terms</a>.
+  </footer>
+</div>
+<script src="assets/js/d3.v7.min.js"></script>
+<script src="assets/js/market.js"></script>
+</body>
+</html>
